@@ -1,3 +1,3 @@
 # ElixirDojo
 
-**Some Coderbyte problems solved using Elixir**
+**Resolution of some algorithms problems using Elixir**
