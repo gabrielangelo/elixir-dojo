@@ -19,4 +19,4 @@ jobs:
     docker:
       - image: circleci/elixir:1.11.2
     steps:
-      - test: mix test
+      - test: mix do deps.get --only test, mix test
