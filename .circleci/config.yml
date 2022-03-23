@@ -3,12 +3,20 @@ jobs:
   build:
     docker:
       - image: circleci/elixir:1.11.2
-      - image: postgres:9.4.1
     working_directory: ~/circleci-demo-elixir-phoenix
     steps:
       - type: checkout
       - run: mix local.rebar --force
       - run: mix local.hex --force
-      - run: mix deps.get
-      - run: mix test
- 
+      - run: mix do deps.get --only test, compile --warnings-as-errors
+  lint:
+    docker:
+      - image: circleci/elixir:1.11.2
+    steps:
+      - run: mix credo --strict
+      - run: mix dialyzer --format short
+  test:
+    docker:
+      - image: circleci/elixir:1.11.2
+    steps:
+      - test: mix test
