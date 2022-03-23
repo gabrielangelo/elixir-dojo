@@ -2,43 +2,49 @@ defmodule JsonDeepUpdate do
   @moduledoc """
   Parses any json structure iterating recursively
   by all its nested maps.
-  Firstly starts getting the first json's key-value. If
-  the value has any nested maps we iterates recurvely by
-  others nested layers until finish. as long the parse happens,
-  we make track of al the path traveled, with this, we have the
-  exactly track to update the copy of structure in order to remove
-  the itens inside @removable_itens
+  Firstly starts getting the first json's key-value. if
+  the value has any nested maps we iterate recursively by
+  others nested layers until finished. as long the nested parse  happens,
+  we make track of all the paths traveled, with this, we have the
+  exactly trail of nested paths to update the copy of structure in order to remove
+  the items inside @removable_itens, furthermore, we don't change the input state, otherwise
+  we create a new copy where the state is changed.
+  Problem name: Json cleaning
+  Platform: Coderbyte
   """
 
   @removeable_itens ["N/D", "-", ""]
 
-  def deep_update(data) do
+  @spec deep_update(map) :: map()
+  def deep_update(data) when is_map(data) do
     do_deep_iter(Map.to_list(data), [], data)
   end
 
-  defp do_deep_iter([{key, value} | tail], path, aux) when is_map(value) do
-    aux = do_deep_iter(Map.to_list(value), [key | path], aux)
-    do_deep_iter(tail, get_path(path), aux)
+  def deep_update(data) when is_binary(data), do: deep_update(Poison.decode!(data))
+
+  defp do_deep_iter([{key, value} | tail], path, map_copy) when is_map(value) do
+    map_copy = do_deep_iter(Map.to_list(value), [key | path], map_copy)
+    do_deep_iter(tail, get_path(path), map_copy)
   end
 
-  defp do_deep_iter([{key, value} | tail], path, aux) when is_list(value) do
-    aux =
-      update_in(aux, Enum.reverse([key | path]), fn list ->
+  defp do_deep_iter([{key, value} | tail], path, map_copy) when is_list(value) do
+    map_copy =
+      update_in(map_copy, Enum.reverse([key | path]), fn list ->
         Enum.reject(list, fn item_list -> item_list in @removeable_itens end)
       end)
 
-    do_deep_iter(tail, path, aux)
+    do_deep_iter(tail, path, map_copy)
   end
 
-  defp do_deep_iter([{key, value} | tail], path, aux)
+  defp do_deep_iter([{key, value} | tail], path, map_copy)
        when value in @removeable_itens do
-    {_, aux} = pop_in(aux, Enum.reverse([key | path]))
-    do_deep_iter(tail, path, aux)
+    {_, map_copy} = pop_in(map_copy, Enum.reverse([key | path]))
+    do_deep_iter(tail, path, map_copy)
   end
 
-  defp do_deep_iter([], _, aux), do: aux
+  defp do_deep_iter([], _, map_copy), do: map_copy
 
-  defp do_deep_iter([_ | tail], path, aux), do: do_deep_iter(tail, path, aux)
+  defp do_deep_iter([_ | tail], path, map_copy), do: do_deep_iter(tail, path, map_copy)
 
   defp get_path([]), do: []
 
