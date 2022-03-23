@@ -1,4 +1,3 @@
 # ElixirDojo
 
-**Algorithms sets written in elixir**
-
+**Some Coderbyte problems solved using Elixir**
