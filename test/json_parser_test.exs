@@ -27,8 +27,7 @@ defmodule JsonDeepUpdateTest do
                "last_name" => "Doe",
                "identity" => %{
                  "issuer_organizations" => ~w<ssp-ce>
-               },
-               "ci_test" => "test"
+               }
              },
              "extra_id" => "123"
            } == JsonDeepUpdate.deep_update(map_param)
