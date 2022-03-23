@@ -2,7 +2,7 @@ version: 2.0
 jobs:
   build:
     docker:
-      - image: circleci/elixir:1.4.2
+      - image: circleci/elixir:1.11.2
       - image: postgres:9.4.1
     working_directory: ~/circleci-demo-elixir-phoenix
     steps:
