@@ -1,4 +1,4 @@
-defmodule JsonDeepUpdate do
+defmodule Problems.JsonDeepUpdate do
   @moduledoc """
   Parses any json structure iterating recursively
   by all its nested maps.

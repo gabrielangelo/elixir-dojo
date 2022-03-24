@@ -3,7 +3,7 @@ defmodule JsonDeepUpdateTest do
 
   use ExUnit.Case, async: true
 
-  alias JsonDeepUpdate
+  alias Problems.JsonDeepUpdate
 
   test "test JsonDeepUpdate worst case when input is a map" do
     map_param = %{
