@@ -1,5 +1,8 @@
 defmodule Problems.DoublyLinkedList do
-  @moduledoc false
+  @moduledoc """
+  Doubly linked list Implementation
+  Link: https://www.geeksforgeeks.org/doubly-linked-list/
+  """
 
   defstruct data: nil, next: nil, previous: nil
 
